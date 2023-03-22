@@ -1,0 +1,142 @@
+<p-toast baseZIndex="10"></p-toast>
+<p-confirmDialog [style]="{width: '50vw'}" header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
+<p-dialog header={{formHeader}} [(visible)]="showForm" [draggable]="false" blockScroll="true" appendTo="body"
+    [modal]="true" [responsive]="true">
+    
+    <div class="p-grid">
+        <div class="p-col-6">
+            <label for="name" class="p-col-4">Name<span class="imp-star"> *</span></label>
+            <div class="p-col-8">
+                <input id="name" placeholder="Name" [style]="{'width':'100%'}" [(ngModel)]="user.name" type="text" pInputText required> 
+            </div>
+        </div>
+        <div class="p-col-6">
+            <label for="email" class="p-col-4">Email<span class="imp-star"> *</span></label>
+            <div class="p-col-8">
+                <input id="email" placeholder="Email" [style]="{'width':'100%'}" [(ngModel)]="user.email" type="text" pInputText required> 
+            </div>
+        </div>
+        <div class="p-col-6">
+            <label for="gender" class="p-col-4">Gender<span class="imp-star"> *</span></label>
+            <div class="p-col-8">
+                <p-dropdown [options]="genderList" [style]="{'width':'100%'}" (onChange)="onGenderChange(user)" placeholder="Choose" [(ngModel)]="user.gender" 
+                    optionLabel="name" optionValue="code" required>                    
+                </p-dropdown> 
+            </div>
+        </div>
+        <div class="p-col-6">
+            <label for="status" class="p-col-4">Status<span class="imp-star"> *</span></label>
+            <div class="p-col-8">
+                <p-dropdown [options]="statusList" [style]="{'width':'100%'}" (onChange)="onStatusChange(user)" placeholder="Choose" [(ngModel)]="user.status" 
+                    optionLabel="name" optionValue="code" required>                    
+                </p-dropdown>  
+            </div>
+        </div>
+    </div>
+    
+    <div class="p-col-12">        
+        <div class="p-grid p-field form-button-align">
+            <button pButton pRipple label="CANCEL"  style="color: #82b440;" icon="pi pi-times" class="p-button-text p-mr-2" 
+                (click)="cancel()">
+            </button>
+            <button pButton pRipple label="SAVE" style="background-color: #82b440;border:#82b440;" icon="pi pi-check" class="p-button-primary p-mr-2" 
+                (click)="save()">
+            </button>
+        </div>
+    </div>
+</p-dialog>
+
+<div class="header">
+    <a href="#default" class="logo">User Management</a>
+    <a href="#default" class="dashboardOptions">Home</a>
+    <a href="#default" class="dashboardOptions">Dashboard</a>
+    <a href="#default" class="dashboardOptions">Projects</a>
+    <a href="#default" class="dashboardOptions">Tasks</a>
+    <a href="#default" class="dashboardOptions">Reporting</a>
+    <a href="#default" class="dashboardOptions">Users</a>
+    <div class="header-right">
+        <i class="pi pi-search p-mr-4 p-text-secondary" style="font-size: 1.5rem" value="2"></i>
+        <i class="pi pi-cog p-mr-4 p-text-secondary" style="font-size: 1.5rem" value="2"></i>
+        <i class="pi pi-bell p-mr-4 p-text-secondary" style="font-size: 1.5rem" value="2"></i>
+        <p-avatar icon="pi pi-user" styleClass="p-mr-2" size="large" shape="circle"></p-avatar>
+    </div>
+</div>
+<div class="card">
+    <div class="p-grid">
+        <div class="p-col-1"></div>
+        <div class="p-col-10">
+            <h1>User Management</h1>
+            <h4 style="color: #afa7a7;">
+                Efficiently manage your user base with our user management software! Say goodbye to manual data entry and repetitive tasks, and say hello to streamlined processes and increased productivity. Our software allows you to easily add, edit, and delete users. our user management software simplifies your workflow and lets you focus on what matters most - growing your business.
+            </h4>
+        <div class="p-col-6">
+            <h4>Total Users</h4>
+            <h4>{{userLength}} of 10 Users</h4>
+            <div>
+                <p-progressBar [value]="totalUsers"></p-progressBar>
+            </div>
+        </div>
+        <div class="p-col-6">
+            
+        </div>
+    </div>
+</div>
+<div class="card">
+    <div class="p-grid">
+        <div class="p-col-1"></div>
+        <div class="p-col-10">
+            <div class="card"> 
+                <div class="add-button-align">
+                    <button pButton pRipple label="New" style="background-color: #000000;border:#000000;" icon="pi pi-plus" class="p-button-success p-mr-2" 
+                    (click)="openAddNew()">
+                    </button>
+                </div>              
+                <p-table #dt [value]="userData"  styleClass="p-datatable-striped" [paginator]="true" [rows]="20" [rowsPerPageOptions]="[5,10,20]" dataKey="id">
+                    <!-- <ng-template pTemplate="caption">
+                        <div class="table-header">
+                            List of Users
+                            <span class="p-input-icon-left">
+                                <i class="pi pi-search"></i>
+                                <input pInputText type="text" (input)="userData.filterGlobal($event.user.name, 'contains')" placeholder="Global Search" />
+                            </span>
+                        </div>
+                    </ng-template> -->
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th pSortableColumn="sNo" class="coloum-width">S.No</th>
+                            <th pSortableColumn="id" class="coloum-width">ID <p-sortIcon field="id"></p-sortIcon></th>
+                            <th pSortableColumn="name">Name <p-sortIcon field="name"></p-sortIcon></th>
+                            <th pSortableColumn="email">Email <p-sortIcon field="email"></p-sortIcon></th>
+                            <th pSortableColumn="gender" class="coloum-width">Gender <p-sortIcon field="gender"></p-sortIcon></th>
+                            <th pSortableColumn="status" class="coloum-width">Status <p-sortIcon field="status"></p-sortIcon></th>
+                            <th class="coloum-width"></th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-user let-editing="editing" let-i="rowIndex" >
+                    <tr class="word-wrap">
+                            <td>{{i+1}}</td>
+                            <td>{{user.id}}</td>
+                            <td>{{user.name}}</td>
+                            <td>{{user.email}}</td>
+                            <td><span class="gender-case">{{user.gender}}</span></td>              
+                            <td><span [class]="'status-badge status-' + statusOptions[user.status?.trim()?.toLowerCase()]">{{user.status}}</span></td>
+                            <td class="row-button-align">
+                                <button pButton pRipple type="button" icon="pi pi-pencil"
+                                    (click)="onClickEdit(user.id)" class="p-button-rounded p-button-text">
+                                </button>
+                                <button pButton pRipple type="button" icon="pi pi-trash"
+                                    (click)="onClickDelete(user)" class="p-button-rounded p-button-text p-button-danger">
+                                </button>
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+        </div>
+        <div class="p-col-1"></div>
+    </div> 
+</div>
+
+<div class="footer">
+    <p></p>
+  </div>
